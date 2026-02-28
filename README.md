@@ -1,34 +1,49 @@
-## Empirical Finance Research & Data Science Portfolio_Ruoyan-Cao
+## Empirical Finance Research & Data Science Portfolio_Ruoyan Cao
 
-This repository contains the coding samples for my pre-doctoral applications, focusing on **empirical finance**. It demonstrates my proficiency in handling data engineering, econometric modeling, and visualization using **SAS, Stata, R and Python**. The coding samples are organized by software tool.
+This repository contains the coding samples for my pre-doctoral applications, focusing on **empirical finance**. It demonstrates my proficiency in data engineering, econometric modeling, and visualization using **SAS, Stata, R and Python**. The coding samples are organized by software tool.
 
 ### 01. SAS: Large-Scale Data Engineering & Structural Modeling
 
 **Key Script**: 'Ruoyan Cao_Coding Sample_SAS'
 
-My SAS expertise, developed primarily through **SAS Enterprise Guide**, focuses on processing massive WRDS and CSMAR datasets and implementing rigorous identification strategies.
+This section demonstrates my capacity to manage the full research lifecycle, from raw data extraction to the implementation of structural identification strategies, using SAS Enterprise Guide.
 
-**Featured Projects (Working Papers):**
-1. **ESG-Ratings Disagreement & Corporate Cash Holdings**: 
-   - Implemented a **Heckman Selection Model** to address sample selection bias in ESG coverage.
-   - Performed complex data integration across **Compustat, CRSP, and Thomson Reuters**.
-   - Calculated firm-level **Systematic Risk (Beta)** via rolling-window Fama-French 3-Factor models.
-2. **Strategic Peer Effects in Investment Efficiency**:
-   - Deployed **Two-Stage Least Squares (2SLS)** to solve the simultaneity bias in peer influence.
-   - Constructed peer networks and utilized **Peer Advertising Expenses** as an instrumental variable (IV).
-- *Key Skills: Macro programming, SQL joins, Winsorization, and 2SLS diagnostics.*
+**Working Paper 1**: The Impact of ESG-ratings Disagreement on Corporate Cash Holdings
 
-### 02. Stata: Empirical Econometrics: Causal Inference & Data Diagnostics
-* This project demonstrates a rigorous **Difference-in-Differences (DiD)** analysis using repeated cross-sectional data to evaluate a school-based food fortification program in India. Beyond a standard implementation, this sample focuses on the critical intersection of **causal identification and data integrity**.
-* **Econometric Framework**: I estimated a DiD model using factor-variable notation and **clustered standard errors at the school level** to account for within-cluster correlation in policy implementation.
-* **Advanced Data Diagnostics**: I conducted a distributional analysis of hemoglobin (Hb) levels, identifying significant **"bunching" at institutional anemia thresholds** (11.5 and 12.0 g/dl). This visualization provides empirical evidence of systematic measurement manipulation or reporting bias by enumerators.
+This project investigates how information outcome uncertainty, proxied by ESG-ratings disagreement, influences corporate liquidity management. The empirical challenge lies in **robust variable construction** and **addressing non-random sample selection**.
+
+* **Variable Construction & Measurement**: I constructed a firm-year proxy for **ESG-ratings disagreement** by calculating the standard deviation of normalized scores across **Asset4, MSCI IVA, and Sustainalytics**. To control for market-level risk, I developed a **SAS Macro** to estimate annual **firm-level Betas** via **rolling-window regressions** (Fama-French 3-Factor & Momentum models) using 15 years of daily **CRSP** stock returns.
+* **Multi-Database Integration**: I integrated **Compustat, CRSP, and Thomson Reuters** by utilizing the **CCM Link Table** to resolve the mapping identification issue between **GVKEY** and **PERMNO**. All relational joins were executed via optimized **PROC SQL** statements to ensure data integrity across different reporting frequencies.
+* **Sample Refinement & Data Cleaning**: Following corporate finance literature, I excluded **financial and utility** firms and applied **1% winsorization** to all continuous variables. I implemented a strict **nmiss** check to ensure the internal validity of the regression sample while managing the trade-off between data quality and sample size.
+* **Heckman Selection Model Implementation**: To address **self-selection bias** in ESG coverage, I estimated a **Probit-based Selection Equation** using the full sample (including non-rated firms). I derived the **Inverse Mills Ratio (IMR)** from the first stage and incorporated it as a correction term in the second-stage regression, ensuring the estimated impact of ESG-ratings disagreement is not confounded by **unobservable factors**.
+
+**Working Paper 2**: Be Armed with Knowledge Capital: The Coopetition Peer Effect in Corporate Investment Efficiency
+
+This project identifies the causal influence of strategic peer effects on a firm's investment efficiency, addressing the **reflection problem** and **simultaneity bias inherent** in peer effect studies.
+
+* **Instrumental Variable (IV) Strategy**: I employed **peer advertising expenses** as an instrument for peer investment, as advertising serves as a strong predictor of a peer's strategic expansion **(relevance)** but is exogenous to the focal firm's internal investment technology **(exclusion restriction)**. This isolates genuine peer influence from correlated industry-wide shocks.
+* **2SLS Implementation & Structural Diagnostics**: I implemented a **Two-Stage Least Squares (2SLS)** approach by first estimating the exogenous variation in peer investment using **a predictive macro** to purge endogenous components. The second stage regresses the focal firm's investment efficiency on these **predicted values**, incorporating knowledge capital as a moderator while employing industry-year fixed effects and clustered standard errors for robust inference.
+
+### 02. Stata: Impact Evaluation & Structural Diagnostics: Beyond the DID Baseline
+
+**Key Script**: 'Ruoyan Cao_Coding Sample_Stata'
+
+This project demonstrates a rigorous **Difference-in-Differences (DID)** analysis using repeated cross-sectional data to evaluate a school-based food fortification program in India. Beyond a standard implementation, this sample focuses on the critical intersection of **causal identification and data integrity**.
+* **Econometric Framework**: I estimated a DID model using factor-variable notation and **clustered standard errors at the school level** to account for within-cluster correlation in policy implementation.
+* **Advanced Data Diagnostics**: I conducted a distributional analysis of hemoglobin (Hb) levels, identifying significant **bunching at institutional anemia thresholds** (11.5 and 12.0 g/dl). This visualization provides empirical evidence of systematic measurement manipulation or reporting bias by enumerators.
+
+| Ages 6-11 (Threshold 11.5) | Ages 12-14 (Threshold 12.0) |
+| :---: | :---: |
+| ![Hb Distribution 6-11](hist_age1.png) | ![Hb Distribution 12-14](hist_age2.png) | 
+
 * **Identification & Robustness Verification**:
-    * **Placebo Testing**: I performed a placebo regression using "age" as a non-target outcome. The statistically insignificant DiD coefficient ($p=0.610$) confirms that the treatment and control groups remained demographically comparable, mitigating concerns regarding compositional shift bias.
-    * **Pre-trend Discussion**: I critically assessed the limitations of testing the **Parallel Trends Assumption** in two-period data and proposed alternative "Event Study" specifications for multi-period extensions.
+    * **Placebo Testing**: I performed a placebo regression using **age** as a non-target outcome. The statistically insignificant DiD coefficient ($p=0.610$) confirms that the treatment and control groups remained demographically comparable, mitigating concerns regarding compositional shift bias.
+    * **Pre-trend Discussion**: I critically assessed the limitations of testing the **Parallel Trends Assumption** in two-period data and proposed alternative **Event Study** specifications for multi-period extensions.
 * **Key Insight**: My analysis concludes that while the program showed a statistically significant reduction in anemia for younger children (11.4 percentage points), the underlying **measurement fraud** at diagnostic cutoffs severely undermines the internal validity of the policy recommendations.
 
-## Appendix: Problem Statement for Difference-in-Differences Analysis
-### Difference-in-Differences: A case study
+**Note**: The complete problem statement for this econometrics project is provided in **Appendix A** for your reference.
+
+### Appendix A: Problem Statement for Difference-in-Differences Analysis: A Case Study
 
 Anemia, defined as low hemoglobin (hb) levels in blood, is one of the most prevalent health ailments worldwide. Severe anemia can lead to impaired cognitive development among children (with lifelong consequences), high rates of maternal and perinatal deaths, and lost productivity due to lethargy and fatigue caused by diminished capacity to deliver oxygen to tissues. The most common cause of anemia is iron deficiency, estimated to account for about 50% of the global anemia prevalence among women and 40% among children. Some countries have attempted to reduce anemia rates (in some cases, successfully) through large-scale food fortification programs, that is, by increasing the content of iron in commonly consumed staples such as salt, wheat flour, or rice.
 

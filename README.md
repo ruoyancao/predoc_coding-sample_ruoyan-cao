@@ -34,7 +34,7 @@ This project demonstrates a rigorous **Difference-in-Differences (DID)** analysi
 
 | Ages 6-11 (Threshold 11.5) | Ages 12-14 (Threshold 12.0) |
 | :---: | :---: |
-| ![Hb Distribution 6-11](hist_age1.png) | ![Hb Distribution 12-14](hist_age2.png) | 
+| ![Hb Distribution 6-11](figures/hist_age1.png) | ![Hb Distribution 12-14](figures/hist_age2.png) | 
 
 * **Identification & Robustness Verification**:
     * **Placebo Testing**: I performed a placebo regression using **age** as a non-target outcome. The statistically insignificant DiD coefficient ($p=0.610$) confirms that the treatment and control groups remained demographically comparable, mitigating concerns regarding compositional shift bias.
@@ -43,7 +43,23 @@ This project demonstrates a rigorous **Difference-in-Differences (DID)** analysi
 
 **Note**: The complete problem statement for this econometrics project is provided in **Appendix A** for your reference.
 
-### Appendix A: Problem Statement for Difference-in-Differences Analysis: A Case Study
+### 03.R: IPW Treatment Effects & Bootstrap Inference (LaLonde, 1986; Dehejia & Wahba, 1999)
+
+**Key Script**: 'Ruoyan Cao_Coding Sample_R'
+
+This project demonstrates a complete **two-step causal estimation pipeline** in R, with a focus on **overlap diagnostics**, **estimator stability**, and **inference with generated regressors**.
+
+* **Propensity Score Estimation (Logit)**: I implement two widely used specifications in the program evaluation literature: (i) A baseline specification following **LaLonde (1986)**; (ii) An augmented specification following **Dehejia & Wahba (1999)**, adding nonlinear terms and additional pre-treatment covariates.
+* **Common Support / Overlap Diagnostics and Trimming**: I assess overlap by comparing the propensity score distributions of treated and control observations. To stabilize IPW weights, I apply **common support trimming** using the intersection of propensity score ranges across treatment groups, and visualize overlap using **density plots** (especially informative when treatment/control sample sizes are unbalanced).
+
+<img src="figures/pscore_overlap_density.png" alt="Propensity Score Overlap: Treatment vs Control" width="650">
+
+* **ATE Estimation via IPW (Regression and GMM Presentations)**: I estimate the ATE using the standard IPW moment condition: $\widehat{\alpha}=\frac{1}{N}\sum_i \frac{(t_i-\hat p_i)\,re78_i}{\hat p_i(1-\hat p_i)}$. For each specification, I present results in two equivalent ways: (i) **Regression-on-a-constant** with heteroskedasticity-robust standard errors; (ii) A **GMM interpretation** of the exactly identified moment condition (highlighting the equivalence between the sample mean estimator and exactly identified GMM).
+* **Bootstrap Inference for Two-Step Estimators (Paired Bootstrap)**: To account for first-stage estimation uncertainty, I implement a **paired bootstrap** that re-runs the full estimation pipeline in each draw: (i) Resample observations with replacement; (ii) Re-estimate the logit model to obtain bootstrap propensity scores; (iii) Recompute common support bounds and re-trim the sample; (iv) Recompute the IPW ATE. The standard deviation of bootstrap ATEs provides a standard error that reflects sampling variation from both the first-stage propensity score estimation and the second-stage IPW estimator.
+
+**Note**: The full problem statement and data description are provided in the **Appendix B**.
+
+### Appendix A: Full Problem Statement for Difference-in-Differences Analysis: A Case Study
 
 Anemia, defined as low hemoglobin (hb) levels in blood, is one of the most prevalent health ailments worldwide. Severe anemia can lead to impaired cognitive development among children (with lifelong consequences), high rates of maternal and perinatal deaths, and lost productivity due to lethargy and fatigue caused by diminished capacity to deliver oxygen to tissues. The most common cause of anemia is iron deficiency, estimated to account for about 50% of the global anemia prevalence among women and 40% among children. Some countries have attempted to reduce anemia rates (in some cases, successfully) through large-scale food fortification programs, that is, by increasing the content of iron in commonly consumed staples such as salt, wheat flour, or rice.
 
@@ -59,8 +75,32 @@ The data can be found in **hb.dta**. Note that the data are not completely clean
 
 #### Task Requirements:
 
-1. **(10 points)** Generate a new dummy variable **An** equal to one if the child is anemic. Define the variable as follows. For children 6-11 years old, $An=1$ if $hb < 11.5$, while for children 12-14, $An=1$ if $hb < 12$. The use of age-dependent thresholds to determine anemia status is widely accepted in public health. Estimate model (2) using **An** as dependent variable, separately for younger (age 6-11) and older (12-14) children, and interpret the results.
+1. (10 points) Generate a new dummy variable **An** equal to one if the child is anemic. Define the variable as follows. For children 6-11 years old, $An=1$ if $hb < 11.5$, while for children 12-14, $An=1$ if $hb < 12$. The use of age-dependent thresholds to determine anemia status is widely accepted in public health. Estimate model (2) using **An** as dependent variable, separately for younger (age 6-11) and older (12-14) children, and interpret the results.
 
-2. **(15 points)** Now let us look at the distribution of **hb** in the data. Estimate a histogram of **Hb** separately for children 6-11 and 12-14, before and after the intervention, in the treated and in the control district (so, a total of $2 \times 2 \times 2 = 8$ distributions). The histogram should not be 'too smooth', so use a large number of 'bins' (at least 50), where 'bins' are the intervals that form the basis of each vertical bar that composes the histogram. You could also treat Hb measurements as discrete (in Stata you can do this using `spikeplot` or `histogram, discrete`). You should notice something odd in the data, especially in relation to the thresholds defined above for anemia.
+2. (15 points) Now let us look at the distribution of **hb** in the data. Estimate a histogram of **Hb** separately for children 6-11 and 12-14, before and after the intervention, in the treated and in the control district (so, a total of $2 \times 2 \times 2 = 8$ distributions). The histogram should not be 'too smooth', so use a large number of 'bins' (at least 50), where 'bins' are the intervals that form the basis of each vertical bar that composes the histogram. You could also treat Hb measurements as discrete (in Stata you can do this using `spikeplot` or `histogram, discrete`). You should notice something odd in the data, especially in relation to the thresholds defined above for anemia.
 
-3. **(10 points)** An important international organization has actually used these data to make strong policy recommendations about the expected benefits from fortification in school meals. Do you think these data can be used to produce a convincing analysis of the school meal program that was implemented in district T? Explain, and describe how you could have improved on the study design.
+3. (10 points) An important international organization has actually used these data to make strong policy recommendations about the expected benefits from fortification in school meals. Do you think these data can be used to produce a convincing analysis of the school meal program that was implemented in district T? Explain, and describe how you could have improved on the study design.
+
+### Appendix B: Full Problem Statement for Bootstrap
+
+This problem is based on a subset of the data used in Lalonde (1986, AER, 'Evaluating the econometric evaluations of training programs', 76, 604-620) and subsequently re-analyzed in Dehejia and Wahba (1999, JASA, 'Causal effects in nonexperimental studies: re-evaluating the evaluation of training programs', 94 (448), 1053-1062). Data (**lalonde.dta**) are from an experimental treatment group and from a non-experimental control group, a sample from the PSID. The regressors are described below. t is the treatment indicator (=1 for treated, those who attend the job training program). The outcome variable is re78 (real earnings in 1978).
+
+ | Variable Name | Variable Description |
+ | :--- | :--- |
+ | **age** | age |
+ | **educ** | years of education |
+ | **black** | indicator for Afro-American |
+ | **hisp** | indicator for hispanic-american |
+ | **marr** | indicator for married |
+ | **re74** | earnings in 1974 (in thousands of 1978 $) |
+ | **re75** | earnings in 1975 (in thousands of 1978 $) |
+ | **u74** | indicator for unemployed in 1974 |
+ | **u75** | indicator for unemployed in 1975 |
+
+#### Task Requirements:
+
+1. (5 points) Estimate the propensity score, using a logit model, and using as predictors AGE, EDUC, BLACK, HISP, MARR, RE74 and U74.
+
+2. (10 points) Using the propensity score estimated in the previous point, and eq. (1), estimate the ATE and its standard error. For simplicity you can ignore the fact that the propensity score has been estimated in the previous step.
+
+3. (10 points) Now you want to estimate the standard error of the ATE, but taking into account that the propensity score had been estimated, and this may contribute to the variance (in general, in two-step estimators the contribution of the estimation error from a 1st stage needs to be taken into account). You do not want to rely on asymptotic approximations and you decide to use the bootstrap. Estimate the s.e. of ˆα using paired bootstrap, and compare the results with those in the previous step.

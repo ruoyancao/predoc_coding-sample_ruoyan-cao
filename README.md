@@ -1,5 +1,24 @@
-# predoc_coding-sample_ruoyan-cao
-### **3. Empirical Econometrics: Causal Inference & Data Diagnostics (Stata)**
+## Empirical Finance Research & Data Science Portfolio_Ruoyan-Cao
+
+This repository contains the coding samples for my pre-doctoral applications, focusing on **empirical finance**. It demonstrates my proficiency in handling data engineering, econometric modeling, and visualization using **SAS, Stata, R and Python**. The coding samples are organized by software tool.
+
+### 01. SAS: Large-Scale Data Engineering & Structural Modeling
+
+**Key Script**: 'Ruoyan Cao_Coding Sample_SAS'
+
+My SAS expertise, developed primarily through **SAS Enterprise Guide**, focuses on processing massive WRDS and CSMAR datasets and implementing rigorous identification strategies.
+
+**Featured Projects (Working Papers):**
+1. **ESG-Ratings Disagreement & Corporate Cash Holdings**: 
+   - Implemented a **Heckman Selection Model** to address sample selection bias in ESG coverage.
+   - Performed complex data integration across **Compustat, CRSP, and Thomson Reuters**.
+   - Calculated firm-level **Systematic Risk (Beta)** via rolling-window Fama-French 3-Factor models.
+2. **Strategic Peer Effects in Investment Efficiency**:
+   - Deployed **Two-Stage Least Squares (2SLS)** to solve the simultaneity bias in peer influence.
+   - Constructed peer networks and utilized **Peer Advertising Expenses** as an instrumental variable (IV).
+- *Key Skills: Macro programming, SQL joins, Winsorization, and 2SLS diagnostics.*
+
+### 02. Stata: Empirical Econometrics: Causal Inference & Data Diagnostics
 * This project demonstrates a rigorous **Difference-in-Differences (DiD)** analysis using repeated cross-sectional data to evaluate a school-based food fortification program in India. Beyond a standard implementation, this sample focuses on the critical intersection of **causal identification and data integrity**.
 * **Econometric Framework**: I estimated a DiD model using factor-variable notation and **clustered standard errors at the school level** to account for within-cluster correlation in policy implementation.
 * **Advanced Data Diagnostics**: I conducted a distributional analysis of hemoglobin (Hb) levels, identifying significant **"bunching" at institutional anemia thresholds** (11.5 and 12.0 g/dl). This visualization provides empirical evidence of systematic measurement manipulation or reporting bias by enumerators.
